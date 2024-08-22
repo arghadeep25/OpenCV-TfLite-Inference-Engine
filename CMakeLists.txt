@@ -42,3 +42,5 @@ target_link_libraries(security_cam_lib ${OpenCV_LIBRARIES} tensorflow-lite)
 # Create the main executable
 add_executable(security_cam ${SRC_FILES} ${INCLUDE_FILES})
 target_link_libraries(security_cam security_cam_lib tensorflow-lite ${OpenCV_LIBRARIES})
+
+add_subdirectory(tests)
