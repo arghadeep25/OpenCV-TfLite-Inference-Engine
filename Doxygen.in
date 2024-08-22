@@ -6,9 +6,9 @@
 # 32 "<command-line>" 2
 # 1 "../Image-Stitching/Doxygen.in"
 DOXYFILE_ENCODING = UTF-8
-PROJECT_NAME = "Image Stiching"
+PROJECT_NAME = "OpenCV TFLite Inferencing"
 PROJECT_NUMBER =
-PROJECT_BRIEF = "Implementation of the paper Automatic Panoramic Image Stitching using Invariant Features"
+PROJECT_BRIEF = "OpenCV TFLite Inferencing"
 PROJECT_LOGO =
 OUTPUT_DIRECTORY = ./documentation
 CREATE_SUBDIRS = NO
