@@ -16,7 +16,6 @@
 #include <tuple>
 #include <utils/inference_status.hpp>
 
-
 namespace tflite ::inference {
 class TFLiteInferenceEngine {
 public:
@@ -72,8 +71,10 @@ public:
 
 public:
   /**
-   * @brief Infer the input image
-   * @param input_image
+   * @brief Get the inference results from the given input image
+   * @param input_image Input image in the format of cv::Mat
+   * @return Tuple of output locations, output classes, output scores
+   *         and number of detections
    */
   std::tuple<TfLiteTensor *, TfLiteTensor *, TfLiteTensor *, TfLiteTensor *>
   infer(const cv::Mat &input_image) {
@@ -107,12 +108,10 @@ public:
     }
 
     const std::vector<int> &results = this->m_interpreter->outputs();
-    std::cout << "Results: " << results.size() << std::endl;
-    auto *output_locations = this->m_interpreter->tensor(results[0]);
-    auto *output_classes = this->m_interpreter->tensor(results[1]);
-    auto *output_scores = this->m_interpreter->tensor(results[2]);
-    auto *num_detections = this->m_interpreter->tensor(results[3]);
-    return {output_locations, output_classes, output_scores, num_detections};
+    return {this->m_interpreter->tensor(results[0]),
+            this->m_interpreter->tensor(results[1]),
+            this->m_interpreter->tensor(results[2]),
+            this->m_interpreter->tensor(results[3])};
   }
 
 public:
