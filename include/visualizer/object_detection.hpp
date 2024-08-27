@@ -9,10 +9,11 @@
 #include <logging/log.hpp>
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <visualizer/visualizer_base.hpp>
 
 namespace tflite::visualizer {
-class ObjectDetectionVisualizer {
-public:
+class ObjectDetectionVisualizer : public VisualizerBase {
+ public:
   ObjectDetectionVisualizer() = default;
   ~ObjectDetectionVisualizer() = default;
 
@@ -22,14 +23,14 @@ public:
   ObjectDetectionVisualizer(ObjectDetectionVisualizer &&) = delete;
   ObjectDetectionVisualizer &operator=(ObjectDetectionVisualizer &&) = delete;
 
-private:
+ private:
   struct DetectionOutput {
     std::vector<cv::Rect> boxes;
     std::vector<int> classes;
     std::vector<float> scores;
   };
 
-public:
+ public:
   /**
    * @brief Visualize the detected objects
    * @param image Input image
@@ -39,10 +40,9 @@ public:
    * @param threshold Detection threshold
    * @return Visualized image
    */
-  static inline cv::Mat
-  overlay(const cv::Mat &image, const float *output_locations,
-          const float *output_classes, const float *output_scores,
-          const float *num_detections, const float threshold = 0.5) {
+  cv::Mat overlay(const cv::Mat &image, const float *output_locations,
+                  const float *output_classes, const float *output_scores,
+                  const float *num_detections, float threshold = 0.5) override {
     if (image.empty()) {
       LOG_ERROR("Input image is empty");
       return cv::Mat();
@@ -73,46 +73,7 @@ public:
     return overlaid_image;
   }
 
-  /**
-   * @brief Save the image to the disk
-   * @param image Input image
-   * @param filename Output filename
-   */
-  static inline void save(const cv::Mat &image, const std::string &filename) {
-    if (image.empty()) {
-      LOG_ERROR("Input image is empty");
-      return;
-    }
-
-    if (filename.empty()) {
-      LOG_ERROR("Output filename is empty");
-      return;
-    }
-
-    cv::imwrite(filename, image);
-  }
-
-  /**
-   * @brief Show the image in a window
-   * @param image Input image
-   * @param window_name Window name
-   */
-  static inline void show(const cv::Mat &image,
-                          const std::string &window_name) {
-    if (image.empty()) {
-      LOG_ERROR("Input image is empty");
-      return;
-    }
-
-    if (window_name.empty()) {
-      LOG_ERROR("Window name is empty");
-      return;
-    }
-    cv::imshow(window_name, image);
-    cv::waitKey(0);
-  }
-
-private:
+ private:
   /**
    * @brief Convert the output tensors to array
    * @param size Image size

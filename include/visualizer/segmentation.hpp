@@ -5,13 +5,10 @@
 #ifndef SEGMENTATION_VISUALIZER_HPP
 #define SEGMENTATION_VISUALIZER_HPP
 
-#include <iostream>
-#include <logging/log.hpp>
-#include <opencv2/opencv.hpp>
-#include <vector>
+#include <visualizer/visualizer_base.hpp>
 
 namespace tflite::visualizer {
-class SegmentationVisualizer {
+class SegmentationVisualizer : public VisualizerBase {
  public:
   SegmentationVisualizer() = default;
   ~SegmentationVisualizer() = default;
@@ -22,9 +19,8 @@ class SegmentationVisualizer {
   SegmentationVisualizer &operator=(SegmentationVisualizer &&) = delete;
 
  public:
-  static inline cv::Mat
-  overlay(const cv::Mat &image, const float *output_locations,
-          const int &height, const int &width, const int &channels) {
+  cv::Mat overlay(const cv::Mat &image, const float *output_locations,
+                         const int &height, const int &width, const int &channels) {
     if (image.empty()) {
       LOG_WARNING("Input image is empty");
       return cv::Mat();
@@ -76,34 +72,6 @@ class SegmentationVisualizer {
     return output_image;
   }
 
-  static inline void show(const cv::Mat &image, const std::string &name) {
-    if (image.empty()) {
-      LOG_WARNING("Input image is empty");
-      return;
-    }
-
-    if (name.empty()) {
-      LOG_WARNING("Window name is empty");
-      return;
-    }
-
-    cv::imshow(name, image);
-    cv::waitKey(0);
-  }
-
-  void save(const cv::Mat &image, const std::string &output_path) {
-    if (image.empty()) {
-      LOG_WARNING("Input image is empty");
-      return;
-    }
-
-    if (output_path.empty()) {
-      LOG_WARNING("Output path is empty");
-      return;
-    }
-
-    cv::imwrite(output_path, image);
-  }
 };
 } // namespace tflite::visualizer
 #endif // SEGMENTATION_VISUALIZER_HPP
