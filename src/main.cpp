@@ -1,9 +1,4 @@
-#include <tensorflow/lite/interpreter.h>
-#include <tensorflow/lite/kernels/register.h>
-#include <tensorflow/lite/model.h>
 
-#include <cstring>
-#include <fstream>
 #include <inference_engine/inference_engine.hpp>
 #include <iostream>
 #include <logging/log.hpp>
@@ -20,30 +15,31 @@ int main() {
   cv::Mat img_1 = cv::imread(img_1_path);
 
   // Object Detection
-    {
-      std::string modelPath =
-          std::string(PROJECT_SOURCE_DIR) + "/models/mobilenet_ssd_v1.tflite";
-      tflite::inference::TFLiteInferenceEngine object_detection;
+  {
+    std::string modelPath =
+        std::string(PROJECT_SOURCE_DIR) + "/models/mobilenet_ssd_v1.tflite";
+    tflite::inference::TFLiteInferenceEngine object_detection;
 
-      object_detection.load_model(modelPath);
-      cv::Mat img_1_clone = img_1.clone();
-      cv::resize(img_1_clone, img_1_clone,
-                 cv::Size(object_detection.get_input_height(),
-                          object_detection.get_input_width()));
+    object_detection.load_model(modelPath);
+    cv::Mat img_1_clone = img_1.clone();
+    cv::resize(img_1_clone, img_1_clone,
+               cv::Size(object_detection.get_input_height(),
+                        object_detection.get_input_width()));
 
-      auto [output_locations, output_classes, output_scores, num_detections] =
-          object_detection.infer(img_1_clone);
+    auto [output_locations, output_classes, output_scores, num_detections] =
+        object_detection.infer(img_1_clone);
 
-      cv::Mat overlayed_image =
-          tflite::visualizer::ObjectDetectionVisualizer::overlay(
-              img_1_clone, output_locations, output_classes, output_scores,
-              num_detections);
-      tflite::visualizer::ObjectDetectionVisualizer::show(overlayed_image,
-                                                          "Object Detection");
-    }
+    tflite::visualizer::ObjectDetectionVisualizer visualizer;
+    cv::Mat overlayed_image =
+        visualizer.overlay(
+            img_1_clone, output_locations, output_classes, output_scores,
+            num_detections);
+    tflite::visualizer::ObjectDetectionVisualizer::show(overlayed_image,
+                                                        "Object Detection");
+  }
 
 
-   // Segmentation
+  // Segmentation
   {
     tflite::inference::TFLiteInferenceEngine segmentation;
     std::string segmentation_model_path =
