@@ -76,17 +76,17 @@ public:
    * @return Tuple of output locations, output classes, output scores
    *         and number of detections
    */
-  std::tuple<TfLiteTensor *, TfLiteTensor *, TfLiteTensor *, TfLiteTensor *>
+  std::tuple<float *, float *, float *, float *>
   infer(const cv::Mat &input_image) {
     if (input_image.empty()) {
       LOG_ERROR("Input image is empty");
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
-    if (input_image.type() != CV_8UC3) {
-      LOG_ERROR("Input Image is not in the format of CV_8UC3");
-      return {nullptr, nullptr, nullptr, nullptr};
-    }
+//    if (input_image.type() != CV_8UC3) {
+//      LOG_ERROR("Input Image is not in the format of CV_8UC3");
+//      return {nullptr, nullptr, nullptr, nullptr};
+//    }
 
     if (!this->m_interpreter) {
       LOG_ERROR("Interpreter not initialized");
@@ -108,10 +108,11 @@ public:
     }
 
     const std::vector<int> &results = this->m_interpreter->outputs();
-    return {this->m_interpreter->tensor(results[0]),
-            this->m_interpreter->tensor(results[1]),
-            this->m_interpreter->tensor(results[2]),
-            this->m_interpreter->tensor(results[3])};
+
+    return {this->m_interpreter->typed_output_tensor<float>(0),
+            this->m_interpreter->typed_output_tensor<float>(1),
+            this->m_interpreter->typed_output_tensor<float>(2),
+            this->m_interpreter->typed_output_tensor<float>(3)};
   }
 
 public:
