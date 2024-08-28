@@ -6,13 +6,12 @@
 #define VISUALIZER_BASE_HPP
 
 #include <iostream>
-#include <opencv2/opencv.hpp>
 #include <logging/log.hpp>
+#include <opencv2/opencv.hpp>
 #include <vector>
 
-
 namespace tflite::visualizer {
-class VisualizerBase{
+class VisualizerBase {
 public:
   VisualizerBase() = default;
   ~VisualizerBase() = default;
@@ -22,18 +21,19 @@ public:
   VisualizerBase(VisualizerBase &&) = delete;
   VisualizerBase &operator=(VisualizerBase &&) = delete;
 
- public:
-  virtual cv::Mat
-  overlay(const cv::Mat &image, const float *output_locations,
-          const float *output_classes, const float *output_scores,
-          const float *num_detections, float threshold) = 0;
+public:
+  static cv::Mat overlay(const cv::Mat &, const float *, const float *, const float *,
+                  const float *, float) {
+    return cv::Mat();
+  };
 
- public:
-  virtual cv::Mat
-  overlay(const cv::Mat &image, const float *output_locations,
-          const int &height, const int &width, const int &channels) = 0;
+public:
+  static cv::Mat overlay(const cv::Mat &, const float *, const int &,
+                          const int &, const int &) {
+    return cv::Mat();
+  }
 
- public:
+public:
   static inline void show(const cv::Mat &image, const std::string &name) {
     if (image.empty()) {
       LOG_WARNING("Input image is empty");
@@ -49,6 +49,7 @@ public:
     cv::waitKey(0);
   }
 
+public:
   static void save(const cv::Mat &image, const std::string &output_path) {
     if (image.empty()) {
       LOG_WARNING("Input image is empty");
@@ -63,7 +64,6 @@ public:
     cv::imwrite(output_path, image);
   }
 };
-}
+} // namespace tflite::visualizer
 
-
-#endif //VISUALIZER_BASE_HPP
+#endif // VISUALIZER_BASE_HPP
