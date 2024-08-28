@@ -83,11 +83,6 @@ public:
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
-//    if (input_image.type() != CV_8UC3) {
-//      LOG_ERROR("Input Image is not in the format of CV_8UC3");
-//      return {nullptr, nullptr, nullptr, nullptr};
-//    }
-
     if (!this->m_interpreter) {
       LOG_ERROR("Interpreter not initialized");
       return {nullptr, nullptr, nullptr, nullptr};
