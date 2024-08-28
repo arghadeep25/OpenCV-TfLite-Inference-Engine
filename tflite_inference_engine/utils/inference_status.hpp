@@ -7,7 +7,7 @@
 
 namespace tflite::inference {
 enum class InferenceStatus {
-  OK,
+  SUCCESS,
   MODEL_LOAD_ERROR,
   INTERPRETER_ERROR,
   TENSOR_ALLOCATION_ERROR,
