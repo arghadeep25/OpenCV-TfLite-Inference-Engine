@@ -29,15 +29,13 @@ int main() {
     auto [output_locations, output_classes, output_scores, num_detections] =
         object_detection.infer(img_1_clone);
 
-    tflite::visualizer::ObjectDetectionVisualizer visualizer;
     cv::Mat overlayed_image =
-        visualizer.overlay(
+        tflite::visualizer::ObjectDetectionVisualizer::overlay(
             img_1_clone, output_locations, output_classes, output_scores,
             num_detections);
     tflite::visualizer::ObjectDetectionVisualizer::show(overlayed_image,
                                                         "Object Detection");
   }
-
 
   // Segmentation
   {
@@ -55,9 +53,11 @@ int main() {
     auto [output_locations, output_classes, output_scores, num_detections] =
         segmentation.infer(img_1_clone);
 
-    cv::Mat overlayed_image = tflite::visualizer::SegmentationVisualizer::overlay(
-        img_1_clone, output_locations, segmentation.get_output_height(),
-        segmentation.get_output_width(), segmentation.get_output_channels());
+    cv::Mat overlayed_image =
+        tflite::visualizer::SegmentationVisualizer::overlay(
+            img_1_clone, output_locations, segmentation.get_output_height(),
+            segmentation.get_output_width(),
+            segmentation.get_output_channels());
     tflite::visualizer::SegmentationVisualizer::show(overlayed_image,
                                                      "Segmentation");
   }
