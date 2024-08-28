@@ -1,6 +1,10 @@
-//
-// Created by arghadeep on 26.08.24.
-//
+/**
+ * @file object_detection.hpp
+ * @details Visualizer for object detection
+ * @author Arghadeep Mazumder
+ * @version 0.1.0
+ * @copyright -
+ */
 
 #ifndef OBJECT_DETECTION_VISUALIZER_HPP
 #define OBJECT_DETECTION_VISUALIZER_HPP

@@ -1,6 +1,10 @@
-//
-// Created by arghadeep on 26.08.24.
-//
+/**
+* @file segmentation.hpp
+* @details Visualizer for segmentation
+* @author Arghadeep Mazumder
+* @version 0.1.0
+* @copyright -
+ */
 
 #ifndef SEGMENTATION_VISUALIZER_HPP
 #define SEGMENTATION_VISUALIZER_HPP
@@ -20,7 +24,8 @@ public:
 
 public:
   static cv::Mat overlay(const cv::Mat &image, const float *output_locations,
-                  const int &height, const int &width, const int &channels) {
+                         const int &height, const int &width,
+                         const int &channels) {
     if (image.empty()) {
       LOG_WARNING("Input image is empty");
       return cv::Mat();
@@ -36,22 +41,8 @@ public:
       return cv::Mat();
     }
 
-    cv::Mat segmentation_map(height, width, CV_8UC1);
-    for (int i = 0; i < height; ++i) {
-      for (int j = 0; j < width; ++j) {
-        float max_prob = 0.0;
-        uchar max_class = 0;
-        for (int c = 0; c < channels; ++c) {
-          float prob =
-              output_locations[i * width * channels + j * channels + c];
-          if (prob > max_prob) {
-            max_prob = prob;
-            max_class = c;
-          }
-        }
-        segmentation_map.at<uchar>(i, j) = static_cast<uchar>(max_class * 255.);
-      }
-    }
+    cv::Mat segmentation_map =
+        generate_segmentation_map(output_locations, height, width, channels);
 
     cv::Mat resized_segmentation_map;
     cv::resize(segmentation_map, resized_segmentation_map, image.size(), 0, 0,
@@ -71,6 +62,29 @@ public:
     cv::Mat output_image;
     cv::addWeighted(image, 0.9, color_map, 0.1, 0, output_image);
     return output_image;
+  }
+
+private:
+  static cv::Mat generate_segmentation_map(const float *output_locations,
+                                           const int &height, const int &width,
+                                           const int &channels) {
+    cv::Mat segmentation_map(height, width, CV_8UC1);
+    for (int i = 0; i < height; ++i) {
+      for (int j = 0; j < width; ++j) {
+        float max_prob = 0.0;
+        uchar max_class = 0;
+        for (int c = 0; c < channels; ++c) {
+          float prob =
+              output_locations[i * width * channels + j * channels + c];
+          if (prob > max_prob) {
+            max_prob = prob;
+            max_class = c;
+          }
+        }
+        segmentation_map.at<uchar>(i, j) = static_cast<uchar>(max_class * 255.);
+      }
+    }
+    return segmentation_map;
   }
 };
 } // namespace tflite::visualizer

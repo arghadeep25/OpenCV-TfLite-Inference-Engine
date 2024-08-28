@@ -1,6 +1,10 @@
-//
-// Created by arghadeep on 27.08.24.
-//
+/**
+* @file visualizer_base.hpp
+* @details Base class for visualizing the output of the model
+* @author Arghadeep Mazumder
+* @version 0.1.0
+* @copyright -
+ */
 
 #ifndef VISUALIZER_BASE_HPP
 #define VISUALIZER_BASE_HPP
