@@ -13,7 +13,7 @@
 
 namespace tflite::visualizer {
 class ObjectDetectionVisualizer : public VisualizerBase {
- public:
+public:
   ObjectDetectionVisualizer() = default;
   ~ObjectDetectionVisualizer() = default;
 
@@ -23,14 +23,14 @@ class ObjectDetectionVisualizer : public VisualizerBase {
   ObjectDetectionVisualizer(ObjectDetectionVisualizer &&) = delete;
   ObjectDetectionVisualizer &operator=(ObjectDetectionVisualizer &&) = delete;
 
- private:
+private:
   struct DetectionOutput {
     std::vector<cv::Rect> boxes;
     std::vector<int> classes;
     std::vector<float> scores;
   };
 
- public:
+public:
   /**
    * @brief Visualize the detected objects
    * @param image Input image
@@ -40,9 +40,10 @@ class ObjectDetectionVisualizer : public VisualizerBase {
    * @param threshold Detection threshold
    * @return Visualized image
    */
-  cv::Mat overlay(const cv::Mat &image, const float *output_locations,
-                  const float *output_classes, const float *output_scores,
-                  const float *num_detections, float threshold = 0.5) override {
+  static cv::Mat overlay(const cv::Mat &image, const float *output_locations,
+                         const float *output_classes,
+                         const float *output_scores,
+                         const float *num_detections, float threshold = 0.5) {
     if (image.empty()) {
       LOG_ERROR("Input image is empty");
       return cv::Mat();
@@ -73,7 +74,7 @@ class ObjectDetectionVisualizer : public VisualizerBase {
     return overlaid_image;
   }
 
- private:
+private:
   /**
    * @brief Convert the output tensors to array
    * @param size Image size
