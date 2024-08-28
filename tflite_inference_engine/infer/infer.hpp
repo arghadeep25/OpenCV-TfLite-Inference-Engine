@@ -175,7 +175,7 @@ public:
 
     // Get the model details
     this->get_model_details();
-    return inference::InferenceStatus::OK;
+    return inference::InferenceStatus::SUCCESS;
   }
 
 private:
