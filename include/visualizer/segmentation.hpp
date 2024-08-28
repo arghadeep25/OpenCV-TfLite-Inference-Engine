@@ -9,7 +9,7 @@
 
 namespace tflite::visualizer {
 class SegmentationVisualizer : public VisualizerBase {
- public:
+public:
   SegmentationVisualizer() = default;
   ~SegmentationVisualizer() = default;
 
@@ -18,9 +18,9 @@ class SegmentationVisualizer : public VisualizerBase {
   SegmentationVisualizer(SegmentationVisualizer &&) = delete;
   SegmentationVisualizer &operator=(SegmentationVisualizer &&) = delete;
 
- public:
-  cv::Mat overlay(const cv::Mat &image, const float *output_locations,
-                         const int &height, const int &width, const int &channels) {
+public:
+  static cv::Mat overlay(const cv::Mat &image, const float *output_locations,
+                  const int &height, const int &width, const int &channels) {
     if (image.empty()) {
       LOG_WARNING("Input image is empty");
       return cv::Mat();
@@ -42,7 +42,8 @@ class SegmentationVisualizer : public VisualizerBase {
         float max_prob = 0.0;
         uchar max_class = 0;
         for (int c = 0; c < channels; ++c) {
-          float prob = output_locations[i * width * channels + j * channels + c];
+          float prob =
+              output_locations[i * width * channels + j * channels + c];
           if (prob > max_prob) {
             max_prob = prob;
             max_class = c;
@@ -53,8 +54,8 @@ class SegmentationVisualizer : public VisualizerBase {
     }
 
     cv::Mat resized_segmentation_map;
-    cv::resize(segmentation_map, resized_segmentation_map, image.size(),
-               0, 0, cv::INTER_NEAREST);
+    cv::resize(segmentation_map, resized_segmentation_map, image.size(), 0, 0,
+               cv::INTER_NEAREST);
 
     // Apply color map to the segmentation map for visualization
     cv::Mat color_map;
@@ -71,7 +72,6 @@ class SegmentationVisualizer : public VisualizerBase {
     cv::addWeighted(image, 0.9, color_map, 0.1, 0, output_image);
     return output_image;
   }
-
 };
 } // namespace tflite::visualizer
 #endif // SEGMENTATION_VISUALIZER_HPP
