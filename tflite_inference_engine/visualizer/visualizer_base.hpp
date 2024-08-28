@@ -1,9 +1,9 @@
 /**
-* @file visualizer_base.hpp
-* @details Base class for visualizing the output of the model
-* @author Arghadeep Mazumder
-* @version 0.1.0
-* @copyright -
+ * @file visualizer_base.hpp
+ * @details Base class for visualizing the output of the model
+ * @author Arghadeep Mazumder
+ * @version 0.1.0
+ * @copyright -
  */
 
 #ifndef VISUALIZER_BASE_HPP
@@ -12,6 +12,7 @@
 #include <iostream>
 #include <log/log.hpp>
 #include <opencv2/opencv.hpp>
+#include <utils/visualization_status.hpp>
 #include <vector>
 
 namespace tflite::visualizer {
@@ -26,46 +27,50 @@ public:
   VisualizerBase &operator=(VisualizerBase &&) = delete;
 
 public:
-  static cv::Mat overlay(const cv::Mat &, const float *, const float *, const float *,
-                  const float *, float) {
+  static cv::Mat overlay(const cv::Mat &, const float *, const float *,
+                         const float *, const float *, float) {
     return cv::Mat();
   };
 
 public:
   static cv::Mat overlay(const cv::Mat &, const float *, const int &,
-                          const int &, const int &) {
+                         const int &, const int &) {
     return cv::Mat();
   }
 
 public:
-  static inline void show(const cv::Mat &image, const std::string &name) {
+  static inline VisualizationStatus show(const cv::Mat &image,
+                                         const std::string &name) {
     if (image.empty()) {
       LOG_WARNING("Input image is empty");
-      return;
+      return VisualizationStatus::INPUT_IMAGE_EMPTY;
     }
 
     if (name.empty()) {
       LOG_WARNING("Window name is empty");
-      return;
+      return VisualizationStatus::WINDOW_NAME_EMPTY;
     }
 
     cv::imshow(name, image);
     cv::waitKey(0);
+    return VisualizationStatus::SUCCESS;
   }
 
 public:
-  static void save(const cv::Mat &image, const std::string &output_path) {
+  static VisualizationStatus save(const cv::Mat &image,
+                                  const std::string &output_path) {
     if (image.empty()) {
       LOG_WARNING("Input image is empty");
-      return;
+      return VisualizationStatus::INPUT_IMAGE_EMPTY;
     }
 
     if (output_path.empty()) {
       LOG_WARNING("Output path is empty");
-      return;
+      return VisualizationStatus::OUTPUT_PATH_EMPTY;
     }
 
     cv::imwrite(output_path, image);
+    return VisualizationStatus::SUCCESS;
   }
 };
 } // namespace tflite::visualizer
