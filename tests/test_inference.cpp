@@ -1,45 +1,50 @@
 //
 // Created by arghadeep on 22.08.24.
 //
+#include "infer/infer.hpp"
 #include <gtest/gtest.h>
 #include <opencv2/opencv.hpp>
-#include "infer/infer.hpp"
 
 using namespace tflite::inference;
 
 class TFLiteInferenceEngineTest : public ::testing::Test {
 protected:
   TFLiteInferenceEngine engine;
+  std::string model_path =
+      std::string(PROJECT_SOURCE_DIR) + "/models/mobilenet_ssd_v1.tflite";
 };
 
 TEST_F(TFLiteInferenceEngineTest, GetInputHeightReturnsCorrectValue) {
-  engine.load_model("path/to/model.tflite");
-  EXPECT_EQ(engine.get_input_height(), 224); // Assuming model input height is 224
+  engine.load_model(this->model_path);
+  EXPECT_EQ(engine.get_input_height(),
+            224); // Assuming model input height is 224
 }
 
 TEST_F(TFLiteInferenceEngineTest, GetInputWidthReturnsCorrectValue) {
-  engine.load_model("path/to/model.tflite");
+  engine.load_model(this->model_path);
   EXPECT_EQ(engine.get_input_width(), 224); // Assuming model input width is 224
 }
 
 TEST_F(TFLiteInferenceEngineTest, GetInputChannelsReturnsCorrectValue) {
-  engine.load_model("path/to/model.tflite");
-  EXPECT_EQ(engine.get_input_channels(), 3); // Assuming model input channels is 3
+  engine.load_model(this->model_path);
+  EXPECT_EQ(engine.get_input_channels(),
+            3); // Assuming model input channels is 3
 }
 
 TEST_F(TFLiteInferenceEngineTest, GetOutputHeightReturnsCorrectValue) {
-  engine.load_model("path/to/model.tflite");
+  engine.load_model(this->model_path);
   EXPECT_EQ(engine.get_output_height(), 7); // Assuming model output height is 7
 }
 
 TEST_F(TFLiteInferenceEngineTest, GetOutputWidthReturnsCorrectValue) {
-  engine.load_model("path/to/model.tflite");
+  engine.load_model(this->model_path);
   EXPECT_EQ(engine.get_output_width(), 7); // Assuming model output width is 7
 }
 
 TEST_F(TFLiteInferenceEngineTest, GetOutputChannelsReturnsCorrectValue) {
-  engine.load_model("path/to/model.tflite");
-  EXPECT_EQ(engine.get_output_channels(), 1000); // Assuming model output channels is 1000
+  engine.load_model(this->model_path);
+  EXPECT_EQ(engine.get_output_channels(),
+            1000); // Assuming model output channels is 1000
 }
 
 TEST_F(TFLiteInferenceEngineTest, InferReturnsNullptrsForEmptyImage) {
@@ -61,7 +66,7 @@ TEST_F(TFLiteInferenceEngineTest, InferReturnsNullptrsForInvalidImageType) {
 }
 
 TEST_F(TFLiteInferenceEngineTest, InferReturnsValidTensorsForValidImage) {
-  engine.load_model("path/to/model.tflite");
+  engine.load_model(this->model_path);
   cv::Mat valid_image(224, 224, CV_8UC3, cv::Scalar(0, 0, 0)); // Valid type
   auto result = engine.infer(valid_image);
   EXPECT_NE(std::get<0>(result), nullptr);
@@ -76,6 +81,6 @@ TEST_F(TFLiteInferenceEngineTest, LoadModelReturnsErrorForInvalidPath) {
 }
 
 TEST_F(TFLiteInferenceEngineTest, LoadModelReturnsOkForValidPath) {
-  auto status = engine.load_model("path/to/model.tflite");
-  EXPECT_EQ(status, tflite::inference::InferenceStatus::OK);
+  auto status = engine.load_model(this->model_path);
+  EXPECT_EQ(status, tflite::inference::InferenceStatus::SUCCESS);
 }
