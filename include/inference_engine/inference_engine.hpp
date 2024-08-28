@@ -1,3 +1,11 @@
+/**
+* @file inference.hpp
+* @details Inferencing engine for TensorFlow Lite models
+* @author Arghadeep Mazumder
+* @version 0.1.0
+* @copyright -
+*/
+
 #ifndef INFERENCE_ENGINE_HPP
 #define INFERENCE_ENGINE_HPP
 
@@ -102,7 +110,18 @@ public:
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
-    const std::vector<int> &results = this->m_interpreter->outputs();
+    if (this->m_interpreter->outputs().size() != 4) {
+      LOG_ERROR("Output size is not equal to 4");
+      return {nullptr, nullptr, nullptr, nullptr};
+    }
+
+    if (this->m_interpreter->typed_output_tensor<float>(0) == nullptr ||
+        this->m_interpreter->typed_output_tensor<float>(1) == nullptr ||
+        this->m_interpreter->typed_output_tensor<float>(2) == nullptr ||
+        this->m_interpreter->typed_output_tensor<float>(3) == nullptr) {
+      LOG_ERROR("Output tensor is nullptr");
+      return {nullptr, nullptr, nullptr, nullptr};
+    }
 
     return {this->m_interpreter->typed_output_tensor<float>(0),
             this->m_interpreter->typed_output_tensor<float>(1),
