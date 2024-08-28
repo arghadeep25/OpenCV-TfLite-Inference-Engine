@@ -17,6 +17,27 @@ find_package(OpenCV COMPONENTS core highgui imgproc features2d REQUIRED)
 set(TENSORFLOW_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/tensorflow")
 message(STATUS "Tensorflow source dir: ${TENSORFLOW_SOURCE_DIR}")
 
+# Check if the directory exists
+if(NOT EXISTS "${TENSORFLOW_SOURCE_DIR}")
+    message(STATUS "TensorFlow directory does not exist. Initializing submodule...")
+
+    # Update and initialize the submodule
+    execute_process(
+            COMMAND git submodule update --init --recursive
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            RESULT_VARIABLE result
+    )
+
+    # Check if the command was successful
+    if(result)
+        message(FATAL_ERROR "Failed to initialize the TensorFlow submodule.")
+    else()
+        message(STATUS "TensorFlow submodule initialized successfully.")
+    endif()
+else()
+    message(STATUS "TensorFlow directory already exists.")
+endif()
+
 add_subdirectory(
         "${TENSORFLOW_SOURCE_DIR}/tensorflow/lite"
         "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" EXCLUDE_FROM_ALL)
@@ -42,3 +63,4 @@ add_executable(tflite_inference_engine ${SRC_FILES} ${INCLUDE_FILES})
 target_link_libraries(tflite_inference_engine tflite_inference_engine_lib tensorflow-lite ${OpenCV_LIBRARIES})
 
 add_subdirectory(tests)
+add_subdirectory(examples)
