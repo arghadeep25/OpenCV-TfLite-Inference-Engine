@@ -10,7 +10,7 @@
 #define VISUALIZER_BASE_HPP
 
 #include <iostream>
-#include <logging/log.hpp>
+#include <log/log.hpp>
 #include <opencv2/opencv.hpp>
 #include <vector>
 

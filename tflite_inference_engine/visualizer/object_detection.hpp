@@ -9,10 +9,7 @@
 #ifndef OBJECT_DETECTION_VISUALIZER_HPP
 #define OBJECT_DETECTION_VISUALIZER_HPP
 
-#include <iostream>
-#include <logging/log.hpp>
-#include <opencv2/opencv.hpp>
-#include <vector>
+
 #include <visualizer/visualizer_base.hpp>
 
 namespace tflite::visualizer {

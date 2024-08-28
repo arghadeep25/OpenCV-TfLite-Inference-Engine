@@ -14,4 +14,4 @@ message(STATUS "Test files: ${TEST_FILES}")
 add_executable(runTests ${TEST_FILES})
 
 # Link test executable with Google Test and your library
-target_link_libraries(runTests gtest gtest_main security_cam_lib tensorflow-lite ${OpenCV_LIBRARIES})
+target_link_libraries(runTests gtest gtest_main tflite_inference_engine_lib tensorflow-lite ${OpenCV_LIBRARIES})

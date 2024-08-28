@@ -20,7 +20,7 @@
 #include <tensorflow/lite/model.h>
 
 #include <filesystem>
-#include <logging/log.hpp>
+#include <log/log.hpp>
 #include <tuple>
 #include <utils/inference_status.hpp>
 

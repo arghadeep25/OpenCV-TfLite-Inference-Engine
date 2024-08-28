@@ -15,8 +15,6 @@ find_package(OpenCV REQUIRED)
 find_package(OpenCV COMPONENTS core highgui imgproc features2d REQUIRED)
 
 set(TENSORFLOW_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/tensorflow")
-# print tensorflow source dir
-message(STATUS "CMake source dir: ${CMAKE_SOURCE_DIR}/submodules")
 message(STATUS "Tensorflow source dir: ${TENSORFLOW_SOURCE_DIR}")
 
 add_subdirectory(
@@ -28,19 +26,19 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 # Source and include directories
 SET(SRC_DIR src)
-SET(INCLUDE_DIR include)
+SET(INCLUDE_DIR tflite_inference_engine)
 
 # Glob for source and header files
 FILE(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
 FILE(GLOB INCLUDE_FILES ${INCLUDE_DIR}/*.hpp)
 
 # Create a library from your source files
-add_library(opencv_tflite_inference_lib ${SRC_FILES} ${INCLUDE_FILES})
-target_include_directories(opencv_tflite_inference_lib PUBLIC ${INCLUDE_DIR})
-target_link_libraries(opencv_tflite_inference_lib ${OpenCV_LIBRARIES} tensorflow-lite)
+add_library(tflite_inference_engine_lib ${SRC_FILES} ${INCLUDE_FILES})
+target_include_directories(tflite_inference_engine_lib PUBLIC ${INCLUDE_DIR})
+target_link_libraries(tflite_inference_engine_lib ${OpenCV_LIBRARIES} tensorflow-lite)
 
 # Create the main executable
-add_executable(opencv_tflite_inference ${SRC_FILES} ${INCLUDE_FILES})
-target_link_libraries(opencv_tflite_inference opencv_tflite_inference_lib tensorflow-lite ${OpenCV_LIBRARIES})
+add_executable(tflite_inference_engine ${SRC_FILES} ${INCLUDE_FILES})
+target_link_libraries(tflite_inference_engine tflite_inference_engine_lib tensorflow-lite ${OpenCV_LIBRARIES})
 
 add_subdirectory(tests)

@@ -1,7 +1,7 @@
 
-#include <inference_engine/inference_engine.hpp>
+#include <infer/infer.hpp>
 #include <iostream>
-#include <logging/log.hpp>
+#include <log/log.hpp>
 #include <memory>
 #include <opencv2/opencv.hpp>
 #include <sstream>

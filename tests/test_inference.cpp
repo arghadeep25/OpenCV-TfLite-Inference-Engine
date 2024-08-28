@@ -3,7 +3,7 @@
 //
 #include <gtest/gtest.h>
 #include <opencv2/opencv.hpp>
-#include "inference_engine/inference_engine.hpp"
+#include "infer/infer.hpp"
 
 using namespace tflite::inference;
 
