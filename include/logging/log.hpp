@@ -1,9 +1,9 @@
 /**
-* @file log.hpp
-* @details Logging utility for the application
-* @author Arghadeep Mazumder
-* @version 0.1.0
-* @copyright -
+ * @file log.hpp
+ * @details Logging utility for the application
+ * @author Arghadeep Mazumder
+ * @version 0.1.0
+ * @copyright -
  */
 #ifndef LOGGING_HPP_
 #define LOGGING_HPP_
@@ -21,11 +21,25 @@ class Logger {
 public:
   enum class Level { DEBUG, INFO, WARNING, ERROR, FATAL };
 
+public:
+  /**
+   * @brief Get the instance of the logger
+   * @return Logger instance
+   */
   static Logger &get_instance() {
     static Logger instance;
     return instance;
   }
 
+public:
+  /**
+   * @brief Log the message
+   * @tparam Args Variadic template
+   * @param level Log level
+   * @param file File name
+   * @param line Line number
+   * @param args Message
+   */
   template <typename... Args>
   void log(Level level, const char *file, int line, Args... args) {
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -50,6 +64,12 @@ private:
   Logger(const Logger &) = delete;
   Logger &operator=(const Logger &) = delete;
 
+private:
+  /**
+   * @brief Get the level string
+   * @param level Log level
+   * @return Level string
+   */
   std::string get_level_string(Level level) const {
     switch (level) {
     case Level::DEBUG:
@@ -67,6 +87,12 @@ private:
     }
   }
 
+private:
+  /**
+   * @brief Get the color for the log level
+   * @param level Log level
+   * @return Color string
+   */
   std::string get_color(Level level) const {
     switch (level) {
     case Level::DEBUG:
@@ -84,6 +110,11 @@ private:
     }
   }
 
+private:
+  /**
+   * @brief Get the current timestamp
+   * @return Current timestamp
+   */
   std::string get_current_timestamp() const {
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
@@ -99,24 +130,24 @@ private:
 } // namespace tflite::logging
 
 #define LOG_DEBUG(...)                                                         \
-  tflite::logging::Logger::get_instance().log(                                  \
+  tflite::logging::Logger::get_instance().log(                                 \
       tflite::logging::Logger::Level::DEBUG, __FILE__, __LINE__, __VA_ARGS__)
 
 #define LOG_INFO(...)                                                          \
-  tflite::logging::Logger::get_instance().log(                                  \
+  tflite::logging::Logger::get_instance().log(                                 \
       tflite::logging::Logger::Level::INFO, __FILE__, __LINE__, __VA_ARGS__)
 
 #define LOG_WARNING(...)                                                       \
-  tflite::logging::Logger::get_instance().log(                                  \
+  tflite::logging::Logger::get_instance().log(                                 \
       tflite::logging::Logger::Level::WARNING, __FILE__, __LINE__,             \
       __VA_ARGS__)
 
 #define LOG_ERROR(...)                                                         \
-  tflite::logging::Logger::get_instance().log(                                  \
+  tflite::logging::Logger::get_instance().log(                                 \
       tflite::logging::Logger::Level::ERROR, __FILE__, __LINE__, __VA_ARGS__)
 
 #define LOG_FATAL(...)                                                         \
-  tflite::logging::Logger::get_instance().log(                                  \
+  tflite::logging::Logger::get_instance().log(                                 \
       tflite::logging::Logger::Level::FATAL, __FILE__, __LINE__, __VA_ARGS__)
 
 #endif // LOGGING_HPP_
