@@ -14,43 +14,23 @@ endif ()
 find_package(OpenCV REQUIRED)
 find_package(OpenCV COMPONENTS core highgui imgproc features2d REQUIRED)
 
-# Set TensorFlow and GoogleTest source directories
-set(TENSORFLOW_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/tensorflow/tensorflow")
-set(GTEST_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/googletest/googletest")
+set(TENSORFLOW_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/tensorflow")
+set(GOOGLE_TEST_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/googletest")
+message(STATUS "Tensorflow source dir: ${TENSORFLOW_SOURCE_DIR}")
+message(STATUS "Google Test source dir: ${GOOGLE_TEST_SOURCE_DIR}")
 
-# Display the source directory paths
-message(STATUS "TensorFlow source dir: ${TENSORFLOW_SOURCE_DIR}")
-message(STATUS "GoogleTest source dir: ${GTEST_SOURCE_DIR}")
+# Check if the directory exists
+if (NOT EXISTS "${TENSORFLOW_SOURCE_DIR}/tensorflow")
+    message(STATUS "TensorFlow directory does not exist. Try git submodule update --init --recursive")
+else ()
+    message(STATUS "TensorFlow directory found.")
+endif ()
 
-# Function to check and initialize a submodule
-function(check_and_initialize_submodule SUBMODULE_DIR)
-    if(NOT EXISTS "${SUBMODULE_DIR}")
-        message(STATUS "${SUBMODULE_DIR} does not exist. Initializing submodule...")
-
-        # Update and initialize the submodule
-        execute_process(
-            COMMAND git submodule update --init --recursive
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            RESULT_VARIABLE result
-            OUTPUT_VARIABLE output
-            ERROR_VARIABLE error_output
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-
-        # Check if the command was successful
-        if(result)
-            message(FATAL_ERROR "Failed to initialize the submodule: ${error_output}")
-        else()
-            message(STATUS "Submodule initialized successfully:\n${output}")
-        endif()
-    else()
-        message(STATUS "${SUBMODULE_DIR} already exists.")
-    endif()
-endfunction()
-
-# Check and initialize TensorFlow and GoogleTest submodules
-check_and_initialize_submodule(${TENSORFLOW_SOURCE_DIR})
-check_and_initialize_submodule(${GTEST_SOURCE_DIR})
+if (NOT EXISTS "${GOOGLE_TEST_SOURCE_DIR}/googletest")
+    message(STATUS "Google Test directory does not exist. Try git submodule update --init --recursive")
+else ()
+    message(STATUS "Google Test directory found.")
+endif ()
 
 add_subdirectory(
         "${TENSORFLOW_SOURCE_DIR}/tensorflow/lite"
