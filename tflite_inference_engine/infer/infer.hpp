@@ -1,10 +1,10 @@
 /**
-* @file inference.hpp
-* @details Inferencing engine for TensorFlow Lite models
-* @author Arghadeep Mazumder
-* @version 0.1.0
-* @copyright -
-*/
+ * @file inference.hpp
+ * @details Inferencing engine for TensorFlow Lite models
+ * @author Arghadeep Mazumder
+ * @version 0.1.0
+ * @copyright -
+ */
 
 #ifndef INFERENCE_ENGINE_HPP
 #define INFERENCE_ENGINE_HPP
@@ -110,15 +110,7 @@ public:
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
-    if (this->m_interpreter->outputs().size() != 4) {
-      LOG_ERROR("Output size is not equal to 4");
-      return {nullptr, nullptr, nullptr, nullptr};
-    }
-
-    if (this->m_interpreter->typed_output_tensor<float>(0) == nullptr ||
-        this->m_interpreter->typed_output_tensor<float>(1) == nullptr ||
-        this->m_interpreter->typed_output_tensor<float>(2) == nullptr ||
-        this->m_interpreter->typed_output_tensor<float>(3) == nullptr) {
+    if (this->m_interpreter->typed_output_tensor<float>(0) == nullptr) {
       LOG_ERROR("Output tensor is nullptr");
       return {nullptr, nullptr, nullptr, nullptr};
     }
@@ -317,13 +309,13 @@ private:
   }
 
 private:
-  int m_input_height{};
-  int m_input_width{};
-  int m_input_channels{};
+  int m_input_height = 0;
+  int m_input_width = 0;
+  int m_input_channels = 0;
 
-  int m_output_height{};
-  int m_output_width{};
-  int m_output_channels{};
+  int m_output_height = 0;
+  int m_output_width = 0;
+  int m_output_channels = 0;
 
   TfLiteIntArray *m_input_dims{};
   TfLiteIntArray *m_output_dims{};
