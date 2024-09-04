@@ -1,5 +1,8 @@
 # OpenCV Tensorflow-Lite Inference Engine
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/3c62ad3569e94f5a8063b335538cb7f4)](https://app.codacy.com/gh/arghadeep25/OpenCV-TfLite-Inference-Engine/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)
+
 ### Overview
 
 This repository provides a simple C++ API to perform inference using Tensorflow-Lite models with OpenCV. The API is designed to be simple and easy to use. The API is designed to be modular and can be easily extended to support other models.
