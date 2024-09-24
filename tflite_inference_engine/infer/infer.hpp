@@ -20,6 +20,7 @@
 #include <tensorflow/lite/model.h>
 
 #include <filesystem>
+#include <log/glogging.hpp>
 #include <log/log.hpp>
 #include <tuple>
 #include <utils/inference_status.hpp>
@@ -87,18 +88,18 @@ public:
   std::tuple<float *, float *, float *, float *>
   infer(const cv::Mat &input_image) {
     if (input_image.empty()) {
-      LOG_ERROR("Input image is empty");
+      LOG(ERROR) << "Input image is empty";
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
     if (!this->m_interpreter) {
-      LOG_ERROR("Interpreter not initialized");
+      LOG(ERROR) << "Interpreter not initialized";
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
     auto *input = this->get_input_tensor();
     if (!input) {
-      LOG_ERROR("Failed to get input tensor");
+      LOG(ERROR) << "Failed to get input tensor";
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
@@ -106,12 +107,12 @@ public:
            input_image.total() * input_image.elemSize());
 
     if (this->m_interpreter->Invoke() != kTfLiteOk) {
-      LOG_ERROR("Failed to invoke the interpreter");
+      LOG(ERROR) << "Failed to invoke the interpreter";
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
     if (this->m_interpreter->typed_output_tensor<float>(0) == nullptr) {
-      LOG_ERROR("Output tensor is nullptr");
+      LOG(ERROR) << "Output tensor is nullptr";
       return {nullptr, nullptr, nullptr, nullptr};
     }
 
@@ -129,14 +130,14 @@ public:
    */
   inference::InferenceStatus load_model(const std::string &model_path) {
     if (model_path.empty() || !std::filesystem::exists(model_path)) {
-      LOG_ERROR("Model path is empty or does not exist");
+      LOG(ERROR) << "Model path is empty or does not exist";
       return inference::InferenceStatus::MODEL_LOAD_ERROR;
     }
     // Load the model
     this->m_model = tflite::FlatBufferModel::BuildFromFile(model_path.c_str());
 
     if (!this->m_model) {
-      LOG_ERROR("Failed to load model: ", model_path);
+      LOG(ERROR) << "Failed to load model: " << model_path;
       return inference::InferenceStatus::MODEL_LOAD_ERROR;
     }
 
@@ -145,19 +146,19 @@ public:
     tflite::InterpreterBuilder(*this->m_model, resolver)(&this->m_interpreter);
 
     if (!this->m_interpreter) {
-      LOG_ERROR("Failed to create interpreter");
+      LOG(ERROR) << "Failed to create interpreter";
       return inference::InferenceStatus::INTERPRETER_ERROR;
     }
 
     if (static_cast<int>(get_num_threads()) == 0) {
-      LOG_ERROR("Failed to get the number of threads");
+      LOG(ERROR) << "Failed to get the number of threads";
       return inference::InferenceStatus::INVOCATION_ERROR;
     }
 
     // Allocate tensor buffers and set the number of threads
     this->m_interpreter->SetNumThreads(static_cast<int>(get_num_threads()));
     if (this->m_interpreter->AllocateTensors() != kTfLiteOk) {
-      LOG_ERROR("Failed to allocate tensors");
+      LOG(ERROR) << "Failed to allocate tensors";
       return inference::InferenceStatus::TENSOR_ALLOCATION_ERROR;
     }
 
@@ -284,9 +285,9 @@ private:
    * @brief Get the input details
    */
   inline void get_input_details() const {
-    LOG_INFO("Input:: | Height:", this->m_input_height,
-             " |\tWidth: ", this->m_input_width,
-             " |\tChannels: ", this->m_input_channels, " |");
+    LOG(INFO) << "Input:: | Height: " << this->m_input_height
+              << " |\tWidth: " << this->m_input_width
+              << " |\tChannels: " << this->m_input_channels << " |";
   }
 
 private:
@@ -294,9 +295,9 @@ private:
    * @brief Get the output details
    */
   inline void get_output_details() const {
-    LOG_INFO("Output:: | Height:", this->m_output_height,
-             " |\tWidth: ", this->m_output_width,
-             " |\tChannels: ", this->m_output_channels, " |");
+    LOG(INFO) << "Output:: | Height: " << this->m_output_height
+              << " |\tWidth: " << this->m_output_width
+              << " |\tChannels: " << this->m_output_channels << " |";
   }
 
 private:

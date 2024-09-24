@@ -46,13 +46,13 @@ public:
                          const float *output_scores,
                          const float *num_detections, float threshold = 0.5) {
     if (image.empty()) {
-      LOG_ERROR("Input image is empty");
+      LOG(ERROR) << "Input image is empty";
       return cv::Mat();
     }
 
     if (output_locations == nullptr || output_classes == nullptr ||
         output_scores == nullptr || num_detections == nullptr) {
-      LOG_ERROR("Output tensors are nullptr");
+      LOG(ERROR) << "Output tensors are nullptr";
       return cv::Mat();
     }
 

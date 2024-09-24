@@ -1,9 +1,9 @@
 /**
-* @file segmentation.hpp
-* @details Visualizer for segmentation
-* @author Arghadeep Mazumder
-* @version 0.1.0
-* @copyright -
+ * @file segmentation.hpp
+ * @details Visualizer for segmentation
+ * @author Arghadeep Mazumder
+ * @version 0.1.0
+ * @copyright -
  */
 
 #ifndef SEGMENTATION_VISUALIZER_HPP
@@ -27,17 +27,17 @@ public:
                          const int &height, const int &width,
                          const int &channels) {
     if (image.empty()) {
-      LOG_WARNING("Input image is empty");
+      LOG(ERROR) << "Input image is empty";
       return cv::Mat();
     }
 
     if (output_locations == nullptr) {
-      LOG_WARNING("Output locations are nullptr");
+      LOG(ERROR) << "Output locations are nullptr";
       return cv::Mat();
     }
 
     if (image.size() != cv::Size(width, height)) {
-      LOG_WARNING("Input image size does not match with the output size");
+      LOG(ERROR) << "Input image size does not match with the output size";
       return cv::Mat();
     }
 

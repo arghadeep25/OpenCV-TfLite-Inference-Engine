@@ -42,12 +42,12 @@ public:
   static inline VisualizationStatus show(const cv::Mat &image,
                                          const std::string &name) {
     if (image.empty()) {
-      LOG_WARNING("Input image is empty");
+      LOG(ERROR) << "Input image is empty";
       return VisualizationStatus::INPUT_IMAGE_EMPTY;
     }
 
     if (name.empty()) {
-      LOG_WARNING("Window name is empty");
+      LOG(ERROR) << "Window name is empty";
       return VisualizationStatus::WINDOW_NAME_EMPTY;
     }
 
@@ -60,12 +60,12 @@ public:
   static VisualizationStatus save(const cv::Mat &image,
                                   const std::string &output_path) {
     if (image.empty()) {
-      LOG_WARNING("Input image is empty");
+      LOG(ERROR) << "Input image is empty";
       return VisualizationStatus::INPUT_IMAGE_EMPTY;
     }
 
     if (output_path.empty()) {
-      LOG_WARNING("Output path is empty");
+      LOG(ERROR) << "Output path is empty";
       return VisualizationStatus::OUTPUT_PATH_EMPTY;
     }
 
