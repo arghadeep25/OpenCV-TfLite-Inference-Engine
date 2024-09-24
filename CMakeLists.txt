@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 project(opencv_tflite_inference VERSION 0.1 DESCRIPTION "Security Camera" LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -13,6 +13,14 @@ endif ()
 # Find OpenCV
 find_package(OpenCV REQUIRED)
 find_package(OpenCV COMPONENTS core highgui imgproc features2d REQUIRED)
+
+
+set(GLOG_INCLUDE_DIR "/usr/include")
+set(GLOG_LIBRARY_DIR "/usr/lib/x86_64-linux-gnu")
+
+set(GFLAGS_INCLUDE_DIR "/usr/include")
+set(GFLAGS_LIBRARY_DIR "/usr/lib/x86_64-linux-gnu")
+
 
 set(TENSORFLOW_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/tensorflow")
 set(GOOGLE_TEST_SOURCE_DIR "${CMAKE_SOURCE_DIR}/submodules/googletest")
@@ -38,6 +46,7 @@ add_subdirectory(
 
 # Include OpenCV
 include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(${GLOG_INCLUDE_DIR})
 
 # Source and include directories
 SET(SRC_DIR src)
@@ -50,11 +59,11 @@ FILE(GLOB INCLUDE_FILES ${INCLUDE_DIR}/*.hpp)
 # Create a library from your source files
 add_library(tflite_inference_engine_lib ${SRC_FILES} ${INCLUDE_FILES})
 target_include_directories(tflite_inference_engine_lib PUBLIC ${INCLUDE_DIR})
-target_link_libraries(tflite_inference_engine_lib ${OpenCV_LIBRARIES} tensorflow-lite)
+target_link_libraries(tflite_inference_engine_lib ${OpenCV_LIBRARIES} tensorflow-lite ${GLOG_LIBRARY_DIR}/libglog.so ${GFLAGS_LIBRARY_DIR}/libgflags.so)
 
 # Create the main executable
 add_executable(tflite_inference_engine ${SRC_FILES} ${INCLUDE_FILES})
-target_link_libraries(tflite_inference_engine tflite_inference_engine_lib tensorflow-lite ${OpenCV_LIBRARIES})
+target_link_libraries(tflite_inference_engine tflite_inference_engine_lib tensorflow-lite ${OpenCV_LIBRARIES} ${GLOG_LIBRARY_DIR}/libglog.so ${GFLAGS_LIBRARY_DIR}/libgflags.so)
 
 add_subdirectory(tests)
 add_subdirectory(examples)
