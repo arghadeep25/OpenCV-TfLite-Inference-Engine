@@ -1,10 +1,10 @@
 /**
-* @file example_object_detection.hpp
-* @details Example script for object detection
-* @author Arghadeep Mazumder
-* @version 0.1.0
-* @copyright -
-*/
+ * @file example_object_detection.hpp
+ * @details Example script for object detection
+ * @author Arghadeep Mazumder
+ * @version 0.1.0
+ * @copyright -
+ */
 
 #include <infer/infer.hpp>
 #include <iostream>
@@ -15,7 +15,7 @@
 
 int main() {
   std::string img_1_path =
-      std::string(PROJECT_SOURCE_DIR) + "/data/person_1.jpg";
+      std::string(PROJECT_SOURCE_DIR) + "/data/person_4.jpg";
   cv::Mat img_1 = cv::imread(img_1_path);
 
   // Object Detection
@@ -39,7 +39,7 @@ int main() {
             num_detections);
 
     auto status = tflite::visualizer::ObjectDetectionVisualizer::show(
-        overlayed_image, "");
+        overlayed_image, "Detection");
     if (status != tflite::visualizer::VisualizationStatus::SUCCESS) {
       LOG_ERROR("Failed to show the image");
     }
