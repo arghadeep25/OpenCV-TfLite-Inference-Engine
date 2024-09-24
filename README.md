@@ -72,20 +72,35 @@ cv::Mat output = tflite::visualizer::SegmentationVisualizer::overlay(
 
 ```
 git clone git@github.com:arghadeep25/OpenCV-TfLite-Inference-Engine.git --recurse-submodules
-cd OpenCV-TfLite-Inference-Engine && mkdir build && cd build
-cmake ..
-make -j$(nproc)
+cd OpenCV-TfLite-Inference-Engine 
+cmake -S . -B build && cmake --build build -j$(nproc)
 ```
 
-### Run
+### Run Examples
 
 ```
-cd examples
-./object_detection_example
-./segmentation_example
+./build/examples/object_detection_example
+./build/examples/segmentation_example
+```
+
+### Run Tests
+
+```
+./build/tests/runTests
 ```
 
 ### Dependencies
 
 - OpenCV
 - Tensorflow
+- glog
+- gflags
+- C++ 17
+
+### Logs Viewer
+
+Open a terminal and run the following command to open the GUI
+```
+glogg
+```
+and then open the log files from the logs directory..
