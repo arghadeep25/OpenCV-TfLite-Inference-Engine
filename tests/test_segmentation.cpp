@@ -22,7 +22,7 @@ protected:
     std::string model_path =
         std::string(PROJECT_SOURCE_DIR) + "/models/deeplabv3.tflite";
     auto status = segmentation.load_model(model_path);
-    assert(stauts == InferenceStatus::SUCCESS);
+    assert(status == InferenceStatus::SUCCESS);
   }
 
   void TearDown() override {}
